@@ -2,6 +2,7 @@ import { Container } from "react-bootstrap";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/Navbar";
 import HomeScreen from "./Screens/HomeScreen";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
@@ -9,10 +10,10 @@ const App = () => {
       <NavigationBar />
       <main>
         <Container>
-          <HomeScreen />
-          <Footer />
+          <Outlet />
         </Container>
       </main>
+      <Footer />
     </>
   );
 };
