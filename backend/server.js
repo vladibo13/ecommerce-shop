@@ -1,13 +1,16 @@
 import express from "express";
-import products from "./data/products.js";
 import dotenv from "dotenv";
+import morgan from "morgan";
 import connectDB from "./config/db.js";
 import productRouter from "./routes/product.router.js";
+
 dotenv.config();
+connectDB();
+
+const app = express();
 const port = process.env.PORT || 5001;
 
-connectDB();
-const app = express();
+app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
   res.json({ msg: "api running" });
