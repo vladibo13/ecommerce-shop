@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import productRouter from "./routes/product.router.js";
+import { errorHandler, notFound } from "./middlewares/error.middleware.js";
 
 dotenv.config();
 connectDB();
@@ -17,5 +18,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/products", productRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
