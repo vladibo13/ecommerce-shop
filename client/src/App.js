@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import Footer from "./components/Footer";
 import NavigationBar from "./components/Navbar";
-import HomeScreen from "./Screens/HomeScreen";
+import HomeScreen from "./screens/HomeScreen";
 import { Outlet } from "react-router-dom";
 
 const App = () => {
