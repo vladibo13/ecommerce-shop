@@ -4,6 +4,8 @@ import { Col, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import axios from "axios";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const HomeScreen = () => {
   // ------------request without redux----------
@@ -23,9 +25,9 @@ const HomeScreen = () => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : e ? (
-        <div>{e?.data?.message || e.error}</div>
+        <Message variant="danger">{e?.data?.message || e.error}</Message>
       ) : (
         <>
           <h2 className="my-2">Latest Products</h2>

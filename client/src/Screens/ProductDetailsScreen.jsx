@@ -7,6 +7,7 @@ import Rating from "../components/Rating";
 import { LinkContainer } from "react-router-bootstrap";
 import axios from "axios";
 import { useGetProductQuery } from "../slices/productsApiSlice";
+import Message from "../components/Message";
 
 const ProductDetailsScreen = () => {
   const { id: productId } = useParams();
@@ -29,7 +30,7 @@ const ProductDetailsScreen = () => {
       {isLoading ? (
         <h2>Loading...</h2>
       ) : e ? (
-        <div>{e?.data?.message || e.error}</div>
+        <Message variant="danger">{e?.data?.message || e.error}</Message>
       ) : (
         <>
           <Container>
