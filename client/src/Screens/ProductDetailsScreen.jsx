@@ -18,6 +18,7 @@ import { useGetProductQuery } from "../slices/productsApiSlice";
 import Message from "../components/Message";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
+import Loader from "../components/Loader";
 
 const ProductDetailsScreen = () => {
   // request without redux
@@ -46,7 +47,7 @@ const ProductDetailsScreen = () => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : e ? (
         <Message variant="danger">{e?.data?.message || e.error}</Message>
       ) : (
