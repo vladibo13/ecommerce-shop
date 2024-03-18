@@ -4,6 +4,7 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 import productRouter from "./routes/product.router.js";
 import userRouter from "./routes/user.router.js";
+import orderRouter from "./routes/order.router.js";
 import { errorHandler, notFound } from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 
@@ -26,6 +27,11 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
+app.use("/api/orders", orderRouter);
+
+app.get("/api/config/paypal", (req, res) => {
+  res.json({ clientId: process.env.PAYPAL_CLIENT_ID });
+});
 
 app.use(notFound);
 app.use(errorHandler);

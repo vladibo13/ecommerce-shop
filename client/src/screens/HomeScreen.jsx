@@ -24,7 +24,9 @@ const HomeScreen = () => {
 
   return (
     <>
-      {isLoading ? (
+      {!products ? (
+        <h2>no products</h2>
+      ) : isLoading ? (
         <Loader />
       ) : e ? (
         <Message variant="danger">{e?.data?.message || e.error}</Message>
