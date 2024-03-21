@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
+  useDeliverOrderMutation,
   useGetOrderByIdQuery,
   useGetPayPalClientIdQuery,
   usePayOrderMutation,
@@ -30,6 +31,9 @@ const OrderScreen = () => {
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
+
+  const [deliverOrder, { isLoading: isLoadingDeliver }] =
+    useDeliverOrderMutation(orderId);
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -78,6 +82,16 @@ const OrderScreen = () => {
   function onError(err) {
     toast.error(err.message);
   }
+
+  const deliverHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order Delivered");
+    } catch (e) {
+      toast.error(e?.data?.message || e.message);
+    }
+  };
 
   function createOrder(data, actions) {
     return actions.order
@@ -207,6 +221,21 @@ const OrderScreen = () => {
                     )}
                   </ListGroup.Item>
                 )}
+                {isLoadingDeliver && <Loader />}
+                {userInfo &&
+                  userInfo.isAdmin &&
+                  order.isPaid &&
+                  !order.isDelivered && (
+                    <ListGroup.Item>
+                      <Button
+                        type="button"
+                        className="btn btn-block"
+                        onClick={deliverHandler}
+                      >
+                        Mark As Delivered
+                      </Button>
+                    </ListGroup.Item>
+                  )}
               </ListGroup>
             </Col>
           </Row>

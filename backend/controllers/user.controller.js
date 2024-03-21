@@ -130,26 +130,65 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Admin
 export const getUsers = asyncHandler(async (req, res) => {
-  res.status(200).json("get users");
+  const users = await User.find();
+  res.status(200).json(users);
 });
 
 // @desc    get user by id
 // @route   GET /api/users/:id
 // @access  Private/Admin
 export const getUserById = asyncHandler(async (req, res) => {
-  res.status(200).json("get user by id");
+  const user = await User.findById(req.params.id).select("-password");
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error("user not found");
+  }
 });
 
 // @desc    delete User Profile
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 export const deleteUserById = asyncHandler(async (req, res) => {
-  res.status(200).json("delete user by id");
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    if (user.isAdmin) {
+      res.status(400);
+      throw new Error("cannot delete admin user");
+    }
+    await User.deleteOne({ _id: user._id });
+    res.status(200).json({ message: "user deleted" });
+  } else {
+    res.status(404);
+    throw new Error("user not found");
+  }
 });
 
 // @desc    update User Profile
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 export const updateUserById = asyncHandler(async (req, res) => {
-  res.status(200).json("update user by id");
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = Boolean(req.body.isAdmin) || user.isAdmin;
+
+    await user.save();
+    res.status(200).json({ message: "user updated" });
+  } else {
+    res.status(404);
+    throw new Error("user not found");
+  }
+});
+
+// @desc    validate if User is Auth as Admin
+// @route   Get /api/isAdmin
+// @access  Private/Admin
+export const validateUserAdmin = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.status(200).json({ isAdmin: user.isAdmin });
 });

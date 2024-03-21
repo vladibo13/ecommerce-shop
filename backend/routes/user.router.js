@@ -9,12 +9,14 @@ import {
   deleteUserById,
   getUserById,
   updateUserById,
+  validateUserAdmin,
 } from "../controllers/user.controller.js";
 import { protect, adminValidate } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.route("").get(protect, adminValidate, getUsers);
+router.route("/").get(protect, adminValidate, getUsers);
+router.route("/isAdmin").get(protect, adminValidate, validateUserAdmin);
 router.route("/register").post(registerUser);
 router.route("/logout").post(logoutUser);
 router.route("/login").post(loginUser);
