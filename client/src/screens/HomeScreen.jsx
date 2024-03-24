@@ -6,6 +6,7 @@ import axios from "axios";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { useParams } from "react-router-dom";
 
 const HomeScreen = () => {
   // ------------request without redux----------
@@ -19,22 +20,22 @@ const HomeScreen = () => {
   //   };
   //   fetchProducts();
   // }, []);
-
-  const { data: products, isLoading, e } = useGetProductsQuery();
-
+  const { pageNumber } = useParams();
+  const { data, isLoading, e } = useGetProductsQuery(pageNumber);
+  console.log(data);
   return (
     <>
-      {!products ? (
-        <h2>no products</h2>
-      ) : isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : e ? (
         <Message variant="danger">{e?.data?.message || e.error}</Message>
+      ) : !data.products.length ? (
+        <p>No Products</p>
       ) : (
         <>
           <h2 className="my-2">Latest Products</h2>
           <Row>
-            {products.map((product) => (
+            {data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>

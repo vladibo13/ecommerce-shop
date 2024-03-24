@@ -5,8 +5,15 @@ import Product from "../models/product.model.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find();
-  res.status(200).json(products);
+  const pageSize = process.env.PAGINATION_PAGE_SIZE;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Product.countDocuments();
+
+  const products = await Product.find()
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Fetch single product
@@ -75,6 +82,44 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   if (product) {
     await Product.deleteOne({ _id: product._id });
     res.status(200).json({ message: "Product deleted succesfully" });
+  } else {
+    res.status(404);
+    throw new Error("product not found");
+  }
+});
+
+// @desc    Create Product Review
+// @route   POST /api/products/:id/reviews
+// @access  Private/Admin
+export const createProductReview = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const isReviewed = product.reviews.find(
+      (p) => p.user.toString() === req.user._id.toString()
+    );
+
+    if (isReviewed) {
+      res.status(400);
+      throw new Error("user already reviewed the product");
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(req.body.rating),
+      comment: req.body.comment,
+      user: req.user._id,
+    };
+
+    product.reviews.push(review);
+    product.numReviews = product.reviews.length;
+
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      product.reviews.length;
+
+    await product.save();
+    res.status(201).json({ message: "Review Added" });
   } else {
     res.status(404);
     throw new Error("product not found");

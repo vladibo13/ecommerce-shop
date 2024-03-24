@@ -60,7 +60,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Users"],
     }),
     getUser: builder.query({
       query: (userId) => ({
@@ -80,4 +80,6 @@ export const {
   useGetUserProfileQuery,
   useGetUsersQuery,
   useDeleteUserMutation,
+  useGetUserQuery,
+  useUpdateUserMutation,
 } = usersApiSlice;
