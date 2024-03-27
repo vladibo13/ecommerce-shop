@@ -26,8 +26,8 @@ function NavigationBar() {
       await logoutMutation().unwrap();
       dispatch(logout());
       navigate("/login");
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
   return (

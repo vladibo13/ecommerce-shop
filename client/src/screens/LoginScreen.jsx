@@ -30,13 +30,11 @@ const LoginScreen = () => {
 
   const submitHanlder = async (e) => {
     e.preventDefault();
-    console.log("hello");
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (error) {
-      console.log(error);
       toast.error(error?.data?.message || error.error);
     }
   };

@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
 import Loader from "../components/Loader";
 import { toast } from "react-toastify";
+import Meta from "../components/Meta";
 
 const ProductDetailsScreen = () => {
   const { id: productId } = useParams();
@@ -76,6 +77,7 @@ const ProductDetailsScreen = () => {
                 Go Back
               </Button>
             </LinkContainer>
+            <Meta title={product.name} />
             <Row>
               <Col sm={5}>
                 <Image src={product.image} fluid />
@@ -167,7 +169,6 @@ const ProductDetailsScreen = () => {
                         value={rating}
                         onChange={(e) => {
                           setRating(e.target.value);
-                          console.log(rating);
                         }}
                       >
                         <option>Select Rating</option>

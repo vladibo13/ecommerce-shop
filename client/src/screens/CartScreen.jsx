@@ -19,7 +19,6 @@ const CartScreen = () => {
   };
 
   const removeFromCartHanlder = (id) => {
-    console.log(id);
     dispatch(removeFromCart(id));
   };
 

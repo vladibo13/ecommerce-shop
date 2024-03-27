@@ -8,6 +8,8 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 const HomeScreen = () => {
   // ------------request without redux----------
@@ -23,7 +25,7 @@ const HomeScreen = () => {
   // }, []);
   const { pageNumber } = useParams();
   const { data, isLoading, e } = useGetProductsQuery(pageNumber);
-  console.log(data);
+
   return (
     <>
       {isLoading ? (
@@ -34,7 +36,9 @@ const HomeScreen = () => {
         <p>No Products</p>
       ) : (
         <>
+          <Meta title="eCommerceShop" />
           <h2 className="my-2">Latest Products</h2>
+          <ProductCarousel />
           <Row>
             {data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
