@@ -11,6 +11,7 @@ import { logout } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { resetCart } from "../slices/cartSlice";
 
 function NavigationBar() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -26,6 +27,7 @@ function NavigationBar() {
     try {
       await logoutMutation().unwrap();
       dispatch(logout());
+      dispatch(resetCart());
       navigate("/login");
     } catch (err) {
       toast.error(err?.data?.message || err.error);

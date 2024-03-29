@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -8,8 +8,8 @@ import {
   ListGroup,
   Row,
 } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { LinkContainer } from "react-router-bootstrap";
 import {
@@ -29,7 +29,7 @@ const ProductDetailsScreen = () => {
     data: product,
     refetch,
     isLoading,
-    e,
+    error,
   } = useGetProductQuery(productId);
 
   const [rating, setRating] = useState(0);
@@ -67,8 +67,10 @@ const ProductDetailsScreen = () => {
     <>
       {isLoading ? (
         <Loader />
-      ) : e ? (
-        <Message variant="danger">{e?.data?.message || e.error}</Message>
+      ) : error ? (
+        <Message variant="danger">
+          {error?.data?.message || error.error}
+        </Message>
       ) : (
         <>
           <Container>
